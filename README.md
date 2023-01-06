@@ -3,7 +3,7 @@
 Este projeto é um simulador de jogos da Mega Sena. Com ele é possível gerar números aleatórios e descobrir qual número é mais frequente.
 
 ## Preview
-<img src="https://raw.githubusercontent.com/medeiroz/flutter-mega-sena-simulator/main/.github/screenshot-1.png" width="250"/>
+<img src="https://raw.githubusercontent.com/medeiroz/flutter-mega-sena-simulator/main/.github/screenshot-1.png" width="350"/>
 
 
 ## Como usar
