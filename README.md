@@ -1,16 +1,37 @@
-# flutter_mega_sena_simulator
+# Flutter Mega Sena Simulator
 
-A new Flutter project.
+Este projeto é um simulador de jogos da Mega Sena. Com ele é possível gerar números aleatórios e descobrir qual número é mais frequente.
 
-## Getting Started
+## Preview
+<img src="https://raw.githubusercontent.com/medeiroz/flutter-mega-sena-simulator/main/.github/screenshot-1.png" width="250"/>
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Como usar
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Para usar este projeto, basta seguir os seguintes passos:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1.  Clone o repositório para o seu computador:
+
+Copy code
+
+`git clone https://github.com/medeiroz/flutter-mega-sena-simulator.git`
+
+2.  Entre na pasta do projeto:
+
+Copy code
+
+`cd flutter-mega-sena-simulator`
+
+3.  Inicie o projeto com o comando:
+
+Copy code
+
+`flutter run`
+
+## Contribuindo
+
+Se você deseja contribuir para este projeto, basta criar um pull request com suas alterações. Todas as contribuições são bem-vindas!
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
