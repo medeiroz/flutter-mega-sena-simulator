@@ -1,49 +1,68 @@
+import 'dart:isolate';
 import 'dart:math';
 
-import 'package:flutter_mega_sena_simulator/app/modules/mega_sena/most_frequent_numbers.dart';
-import 'package:flutter_mega_sena_simulator/app/modules/mega_sena/number_generator.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_mega_sena_simulator/app/pages/home_page/home_page_state.dart';
 
-class MegaSena implements NumberGenerator, MostFrequentNumbers {
-  int maxNumber = 60;
-  Map<int, int> numberWithCounter = {};
+class MegaSena {
+  final Map<int, int> _numberFrequency = {};
+  final gameDisplayKey = GlobalKey<HomePageState>();
 
-  @override
-  void generateNumbers(int quantity) async {
-    numberWithCounter = {};
-    final numbers = <int>[];
+  void generateGame() {
+    var random = Random();
+    var game = <int>{};
+    for (int i = 0; i < 6; i++) {
+      int number = random.nextInt(60) + 1;
+      game.add(number);
+      _numberFrequency[number] = (_numberFrequency[number] ?? 0) + 1;
+    }
+  }
+
+  List<int> getMostGeneratedNumbers({int quantity = 6}) {
+    final counts = _numberFrequency.entries.toList(growable: false)
+      ..sort((entry1, entry2) => entry2.value.compareTo(entry1.value));
+    return counts.take(quantity).map((entry) => entry.key).toList()..sort();
+  }
+
+  void reset() {
+    _numberFrequency.clear();
+  }
+
+  Future<void> asyncGenerateGames(List<dynamic> arguments) async {
+    final SendPort sendPort = arguments.first;
+    final int quantity = arguments.last;
+
+    sendPort.send({
+      'type': 'update_status',
+      'status': 'started',
+      'value': [0],
+      'progress': 0,
+    });
+
+    reset();
 
     for (int i = 0; i < quantity; i++) {
-      final number = Random().nextInt(maxNumber) + 1;
-      numbers.add(number);
+      generateGame();
+      sendPort.send({
+        'type': 'update_result',
+        'status': 'running',
+        'value': getMostGeneratedNumbers(),
+        'progress': _calculateProgress(value: i, total: quantity)
+      });
     }
 
-    for (final number in numbers) {
-      numberWithCounter[number] = (numberWithCounter[number] ?? 0) + 1;
-    }
+    sendPort.send({
+      'type': 'update_status',
+      'status': 'finished',
+      'value': getMostGeneratedNumbers(),
+      'progress': 1.0,
+    });
   }
 
-  @override
-  List<int> getMostFrequentNumbers(int quantity) {
-    final sortedCounts = numberWithCounter.entries.toList(growable: false)
-      ..sort((entry1, entry2) => entry2.value.compareTo(entry1.value));
-    return sortedCounts.take(quantity).map((entry) => entry.key).toList()
-      ..sort();
-  }
-
-  List<int> generateAndGetMostFrequentNumbers({
-    int quantity = 100000,
-    int mostFrequentQuantity = 6,
+  double _calculateProgress({
+    required int value,
+    required int total,
   }) {
-    generateNumbers(quantity);
-    return getMostFrequentNumbers(mostFrequentQuantity);
-  }
-
-  MegaSena setMaxNumber(int maxNumber) {
-    if (maxNumber < 1) {
-      throw Exception('The maximum number must be greater than zero.');
-    }
-    this.maxNumber = maxNumber;
-
-    return this;
+    return value / total;
   }
 }
